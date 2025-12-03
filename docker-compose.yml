@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mydemo-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: mydemo
+      MYSQL_USER: mydemo
+      MYSQL_PASSWORD: mydemo123
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+  my-demo:
+    image: crpi-30y88bxc6uf0bne6.cn-guangzhou.personal.cr.aliyuncs.com/lin-demo/my-demo:latest
+    container_name: my-demo
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydemo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: mydemo
+      SPRING_DATASOURCE_PASSWORD: mydemo123
+    ports:
+      - "8080:8080"
+    restart: always
+
+
+volumes:
+  mysql-data:
