@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI with Maven and Docker
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # 一定要是 ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -26,12 +26,14 @@ jobs:
       - name: Package without tests
         run: mvn -B -DskipTests package
 
-      - name: Upload jar artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: target/*.jar
+      - name: List target directory
+        run: ls -l target
+
+      - name: Show Docker version
+        run: docker version
 
       - name: Build Docker image
         run: |
+          echo "Current dir: $(pwd)"
+          ls
           docker build -t my-demo:${{ github.sha }} .
