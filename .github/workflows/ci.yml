@@ -37,3 +37,17 @@ jobs:
           echo "Current dir: $(pwd)"
           ls
           docker build -t my-demo:${{ github.sha }} .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Tag and push Docker image
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/my-demo
+          docker tag my-demo:${{ github.sha }} $IMAGE_NAME:latest
+          docker tag my-demo:${{ github.sha }} $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
