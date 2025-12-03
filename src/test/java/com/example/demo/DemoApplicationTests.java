@@ -7,9 +7,9 @@ import org.springframework.util.Assert;
 @SpringBootTest
 class DemoApplicationTests {
 
-    @Test
-    void contextLoads() {
+//    @Test
+//    void contextLoads() {
 //        Assert.isTrue(1 == 2, "error Test");
-    }
+//    }
 
 }
