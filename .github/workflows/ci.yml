@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # 一定要是 ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -26,16 +26,29 @@ jobs:
       - name: Package without tests
         run: mvn -B -DskipTests package
 
+      - name: List target directory
+        run: ls -l target
+
+      - name: Show Docker version
+        run: docker version
+
       - name: Build Docker image
         run: |
+          echo "Current dir: $(pwd)"
+          ls
           docker build -t my-demo:${{ github.sha }} .
 
-      - name: Save Docker image as tar.gz
-        run: |
-          docker save my-demo:${{ github.sha }} | gzip > my-demo-${{ github.sha }}.tar.gz
-
-      - name: Upload Docker image artifact
-        uses: actions/upload-artifact@v4
+      - name: Login to ACR
+        uses: docker/login-action@v3
         with:
-          name: my-demo-image
-          path: my-demo-${{ github.sha }}.tar.gz
+          registry: ${{ secrets.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push image to ACR
+        run: |
+          IMAGE=${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/my-demo
+          docker build -t $IMAGE:${{ github.sha }} .
+          docker tag $IMAGE:${{ github.sha }} $IMAGE:latest
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
