@@ -1,54 +1,54 @@
-#name: Java CI with Maven and Docker
-#
-#on:
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest   # 一定要是 ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: 'temurin'
-#          java-version: '17'
-#
-#      - name: Run unit tests
-#        run: mvn -B clean test
-#
-#      - name: Package without tests
-#        run: mvn -B -DskipTests package
-#
-#      - name: List target directory
-#        run: ls -l target
-#
-#      - name: Show Docker version
-#        run: docker version
-#
-#      - name: Build Docker image
-#        run: |
-#          echo "Current dir: $(pwd)"
-#          ls
-#          docker build -t my-demo:${{ github.sha }} .
-#
-#      - name: Login to ACR
-#        uses: docker/login-action@v3
-#        with:
-#          registry: ${{ secrets.ACR_REGISTRY }}
-#          username: ${{ secrets.ACR_USERNAME }}
-#          password: ${{ secrets.ACR_PASSWORD }}
-#
-#      - name: Build and push image to ACR
-#        run: |
-#          IMAGE=${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/my-demo
-#          docker build -t $IMAGE:${{ github.sha }} .
-#          docker tag $IMAGE:${{ github.sha }} $IMAGE:latest
-#          docker push $IMAGE:${{ github.sha }}
-#          docker push $IMAGE:latest
+name: Java CI with Maven and Docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest   # 一定要是 ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run unit tests
+        run: mvn -B clean test
+
+      - name: Package without tests
+        run: mvn -B -DskipTests package
+
+      - name: List target directory
+        run: ls -l target
+
+      - name: Show Docker version
+        run: docker version
+
+      - name: Build Docker image
+        run: |
+          echo "Current dir: $(pwd)"
+          ls
+          docker build -t my-demo:${{ github.sha }} .
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push image to ACR
+        run: |
+          IMAGE=${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/my-demo
+          docker build -t $IMAGE:${{ github.sha }} .
+          docker tag $IMAGE:${{ github.sha }} $IMAGE:latest
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
