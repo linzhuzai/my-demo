@@ -34,4 +34,4 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t demo:${{ github.sha }} .
+          docker build -t my-demo:${{ github.sha }} .
