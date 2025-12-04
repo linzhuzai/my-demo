@@ -11,6 +11,10 @@ services:
       MYSQL_DATABASE: mydemo
       MYSQL_USER: mydemo
       MYSQL_PASSWORD: mydemo123
+    command:
+      - --slow_query_log=ON
+      - --long_query_time=1
+      - --log_output=FILE
     volumes:
       - mysql-data:/var/lib/mysql
     restart: always
