@@ -27,6 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydemo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
       SPRING_DATASOURCE_USERNAME: mydemo
       SPRING_DATASOURCE_PASSWORD: mydemo123
+    volumes:
+      - app-logs:/logs
     ports:
       - "8080:8080"
     restart: always
@@ -52,3 +54,4 @@ services:
 
 volumes:
   mysql-data:
+  app-logs:
