@@ -1,0 +1,18 @@
+filebeat.inputs:
+  - type: filestream
+    id: my-demo-logs
+    enabled: true
+    paths:
+      - /var/log/myapp/app.log
+    fields:
+      service: my-demo
+    fields_under_root: true
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+
+setup.kibana:
+  host: "http://kibana:5601"
+
+# 为了 demo 简化权限检查
+logging.to_stdout: true
