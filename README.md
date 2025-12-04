@@ -7,3 +7,8 @@ docker rm my-demo || true
 
 # 启动新容器（按你实际端口改）
 docker run -d --name my-demo -p 8080:8080 crpi-30y88bxc6uf0bne6.cn-guangzhou.personal.cr.aliyuncs.com/lin-demo/my-demo:latest
+
+
+
+docker compose down       # 先停掉旧的
+docker compose up -d      # 启动 my-demo + mysql
